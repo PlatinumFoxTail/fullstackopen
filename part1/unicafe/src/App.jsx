@@ -15,7 +15,12 @@ const Button = ({ onClick, text }) => (
   </button>
 )
 
-const Statistics = (props => {
+const Statistics = (props) => {
+  if (props.good === 0 && props.neutral === 0 && props.bad === 0) {
+    return (
+        <p>No feedback given</p>
+    )
+  }
   return (
     <div>
       <p>good {props.good}</p>
@@ -24,10 +29,9 @@ const Statistics = (props => {
       <p>all {props.good + props.neutral + props.bad}</p>
       <p> average {(props.good * 1 + props.neutral * 0 + props.bad * -1) / (props.good + props.neutral + props.bad)} </p>
       <p> positive {props.good / (props.good + props.neutral + props.bad) * 100}%</p>
-
     </div>
   )
-})
+}
 
 const App = () => {
   const welcome = 'give feedback'
