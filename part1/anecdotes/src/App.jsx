@@ -1,5 +1,14 @@
 import { useState } from 'react'
 
+const Header = (props) => {
+  //console.log(props)
+  return (
+    <div>
+      <h1>{props.anecdote}</h1>
+    </div>
+  )
+}
+
 const Button = ({ onClick, text }) => (
   <button onClick={onClick}>
     {text}
@@ -7,6 +16,9 @@ const Button = ({ onClick, text }) => (
 )
 
 const App = () => {
+  const welcome = 'Anecdote of the day'
+  const top_anecdote = 'Anecdote with most votes'
+
   const anecdotes = [
     'If it hurts, do it more often.',
     'Adding manpower to a late software project makes it later!',
@@ -35,11 +47,17 @@ const App = () => {
     //console.log(copy)
   }
 
+  //indexOf returns the first index that corresponds to the highest value in the points array
+  const maxPoints = points.indexOf(Math.max(...points));
+
   return (
     <div>
+      <Header anecdote={welcome} />
       <p>{anecdotes[selected]}</p>
       <Button onClick={newAnecdote} text="new anecdote" />
       <Button onClick={newVote} text="vote" />
+      <Header anecdote={top_anecdote} />
+      <p>{anecdotes[maxPoints]}</p>
     </div>
   )
 }
