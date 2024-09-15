@@ -17,8 +17,9 @@ const App = () => {
     'Programming without an extremely heavy use of console.log is same as if a doctor would refuse to use x-rays or blood tests when dianosing patients.',
     'The only way to go fast, is to go well.'
   ]
-   
   const [selected, setSelected] = useState(0)
+
+  const [points, setPoints] = useState([0 ,0 ,0 ,0 ,0 ,0 ,0 , 0]); // creating array with zeroes of same length as annecdotes array
 
   const newAnecdote = () => {
     // Math.random generates a random floating value 0-1 and Mah.floor rounds down to nearest integer 
@@ -27,11 +28,18 @@ const App = () => {
     setSelected(randomIndex)
   }
 
+  const newVote = () => {
+    const copy = [...points] // copying the points
+    copy[selected] += 1 // increasing vote value of the selected anecdote index
+    setPoints(copy); // updating the points
+    //console.log(copy)
+  }
+
   return (
     <div>
       <p>{anecdotes[selected]}</p>
-
       <Button onClick={newAnecdote} text="new anecdote" />
+      <Button onClick={newVote} text="vote" />
     </div>
   )
 }
