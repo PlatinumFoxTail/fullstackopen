@@ -1,6 +1,10 @@
 const Header = ({ course }) => <h1>{course}</h1>
 
-const Total = ({ sum }) => <p>Number of exercises {sum}</p>
+const Total = ({ parts }) =>
+  <>
+    {/* parts = object array, reduce=iterate function, sum=cumulative addition, part=item to be passed to reduce function, 0=initial value */}
+    <b>total of {parts.reduce((sum, part) => sum + part.exercises, 0)} exercises</b>
+  </>
 
 const Part = ({ part }) => 
   <p>
@@ -9,7 +13,7 @@ const Part = ({ part }) =>
 
 const Content = ({ parts }) => 
   <>
-    {/* parts = array, map=iterate function, key=attribute in React to identify items, part=item to be passed to Part component */}
+    {/* parts = object array, map=iterate function, key=attribute in React to identify items, part=item to be passed to Part component */}
     {parts.map(part => <Part key={part.id} part={part} />)}
   </>
 
@@ -18,6 +22,7 @@ const Course = ({ course }) => {
     <>
       <Header course={course.name} />
       <Content parts={course.parts} />
+      <Total parts={course.parts} />
     </>
   )
 }
@@ -41,6 +46,11 @@ const App = () => {
         name: 'State of a component',
         exercises: 14,
         id: 3
+      },
+      {
+        name: 'Redux',
+        exercises: 11,
+        id: 4
       }
     ]
   }
