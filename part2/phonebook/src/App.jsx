@@ -14,9 +14,19 @@ const App = () => {
       id: persons.length + 1,
     }
 
-    if (newName.trim()) {
-      setPersons(persons.concat(personObject))
-      setNewName('')
+    /* some() method tests if at least one element in the persons
+    array passes (person.name === newName) test */
+    if (persons.some(person => person.name === newName)) {
+      // alert() method instructs the browser to display a dialog box
+      alert(`${newName} is already added to the phonebook`)
+      return
+    }
+    
+    else {
+      /* add the new person to the list. concat method to assure React 
+      recognize that the state has changed and triggers a re-render*/
+      setPersons(persons.concat(personObject)) 
+      setNewName('') // clearing the input field into an empty string
     }
   }
 
