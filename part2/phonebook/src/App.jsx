@@ -6,11 +6,13 @@ const App = () => {
     { name: 'Arto Hellas' }
   ]) 
   const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
 
-  const addName = (event) => {
+  const addPerson = (event) => {
     event.preventDefault()
     const personObject = {
       name: newName,
+      number: newNumber,
       id: persons.length + 1,
     }
 
@@ -26,7 +28,9 @@ const App = () => {
       /* add the new person to the list. concat method to assure React 
       recognize that the state has changed and triggers a re-render*/
       setPersons(persons.concat(personObject)) 
-      setNewName('') // clearing the input field into an empty string
+      // clearing input fields into empty strings
+      setNewName('')
+      setNewNumber('')
     }
   }
 
@@ -34,15 +38,19 @@ const App = () => {
     setNewName(event.target.value)
   }
 
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value)
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
-      <form onSubmit={addName}>
+      <form onSubmit={addPerson}>
         <div>
-          name: <input
-            value={newName}
-            onChange={handleNameChange}
-          />
+          name: <input value={newName} onChange={handleNameChange} />
+        </div>
+        <div>
+          number: <input value={newNumber} onChange={handleNumberChange}/>
         </div>
         <div>
           <button type="submit">add</button>
