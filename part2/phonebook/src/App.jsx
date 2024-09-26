@@ -26,23 +26,28 @@ const App = () => {
       })
   }, []) 
 
-  //createPersonobject function to create a new person object
+  //createPersonobject function to create a new OR update an existing person object
   const createPersonobject = (newName, newNumber) => {
-    const personObject = {
-      name: newName,
-      number: newNumber,
-      //setting id to string, because dummy values' ids keeps on insiting being string despite of manual schange in db.json 
-      id: (persons.length + 1).toString()
-    }
+    const person = persons.find(person => person.name === newName);
 
-    /* some() method tests if at least one element in the persons
-    array passes (person.name === newName) test */
-    if (persons.some(person => person.name === newName)) {
-      // alert() method instructs the browser to display a dialog box
-      alert(`${newName} is already added to the phonebook`)
-      return
+    if (person) {
+      if (window.confirm(`${newName} is already added to the phonebook, replace the old number with a new one?`)) {
+        //update the person object with new number
+        const changedPerson = { ...person, number: newNumber };
+        personService
+          .update(person.id, changedPerson)
+          .then(response => {
+            setPersons(persons.map(p => p.id !== person.id ? p : response.data));
+          })
+      }
       //personService add the person object to the json server
     } else {
+      const personObject = {
+        name: newName,
+        number: newNumber,
+        //setting id to string, because dummy values' ids keeps on insiting being string despite of manual schange in db.json
+        id: (persons.length + 1).toString()
+      }
       personService
         .create(personObject)
         .then(response => {
@@ -50,6 +55,7 @@ const App = () => {
         })
     }
   }
+
   //delteing a person obeject
   const delPersonobject = (id) => {
     const person = persons.find(person => person.id === id)
