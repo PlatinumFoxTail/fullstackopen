@@ -17,7 +17,7 @@ const Searchname = ({ persons, setFilteredNames }) => {
     )
     //updating filteredNames in App.jsx
     setFilteredNames(filtered)
-  }, [searchName, persons, setFilteredNames])
+  }, [searchName, persons])
 
   return (
     <div>
