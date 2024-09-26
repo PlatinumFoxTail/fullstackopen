@@ -14,17 +14,19 @@ const App = () => {
     { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
   ]) 
 
+  //filtered names set to person array
+  const [filteredNames, setFilteredNames] = useState(persons)
+
+  //useEffect hook to fetch data from json server
   useEffect(() => {
     personService
       .getAll()
       .then(response => {
         setPersons(response.data)
       })
-  }, [])
+  }, []) 
 
-  //filtered names set to person array
-  const [filteredNames, setFilteredNames] = useState(persons) 
-
+  //createPersonobject function to create a new person object
   const createPersonobject = (newName, newNumber) => {
     const personObject = {
       name: newName,
@@ -38,10 +40,13 @@ const App = () => {
       // alert() method instructs the browser to display a dialog box
       alert(`${newName} is already added to the phonebook`)
       return
+      //personService add the person object to the json server
     } else {
-      /* add the new person to the list. concat method to assure React 
-      recognize that the state has changed and triggers a re-render*/
-      setPersons(persons.concat(personObject))
+      personService
+        .create(personObject)
+        .then(response => {
+          setPersons(persons.concat(response.data));
+        })
     }
   }
 
@@ -67,7 +72,7 @@ const App = () => {
       </ul>
 
       <div>
-        debug: {}
+        debug: {} {}
       </div>
     </div>
   )
