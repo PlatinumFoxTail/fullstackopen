@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 
 import Persons from './components/persons'
 import Addpersons from './components/addpersons'
 import Searchname from './components/searchname'
+
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([
@@ -13,17 +14,13 @@ const App = () => {
     { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
   ]) 
 
-  const hook = () => {
-    //console.log('effect')
-    axios
-      .get('http://localhost:3001/persons')
+  useEffect(() => {
+    personService
+      .getAll()
       .then(response => {
-        //console.log('promise fulfilled')
         setPersons(response.data)
       })
-  }
-  
-  useEffect(hook, [])
+  }, [])
 
   //filtered names set to person array
   const [filteredNames, setFilteredNames] = useState(persons) 
