@@ -8,10 +8,10 @@ import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas', number: '040-123456', id: 1 },
+    /*{ name: 'Arto Hellas', number: '040-123456', id: 1 },
     { name: 'Ada Lovelace', number: '39-44-5323523', id: 2 },
     { name: 'Dan Abramov', number: '12-43-234345', id: 3 },
-    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }
+    { name: 'Mary Poppendieck', number: '39-23-6423122', id: 4 }*/
   ]) 
 
   //filtered names set to person array
@@ -31,7 +31,8 @@ const App = () => {
     const personObject = {
       name: newName,
       number: newNumber,
-      id: persons.length + 1,
+      //setting id to string, because dummy values' ids keeps on insiting being string despite of manual schange in db.json 
+      id: (persons.length + 1).toString()
     }
 
     /* some() method tests if at least one element in the persons
@@ -46,6 +47,21 @@ const App = () => {
         .create(personObject)
         .then(response => {
           setPersons(persons.concat(response.data));
+        })
+    }
+  }
+  //delteing a person obeject
+  const delPersonobject = (id) => {
+    const person = persons.find(person => person.id === id)
+    //window.confirm method displaying a dialog box
+    if (window.confirm(`Delete ${person.name} ?`)) {
+      personService
+        .del(id)
+        .then(response => {
+          //updating persons array (in App.jsx) by removing the person object deleted
+          setPersons(persons.filter(p => p.id !== id))
+          //updating filteredNames (in browser) by removing the person object deleted
+          setFilteredNames(filteredNames.filter(p => p.id !== id))
         })
     }
   }
@@ -67,7 +83,7 @@ const App = () => {
       <h2>Numbers</h2>
       <ul>
         {filteredNames.map(person =>
-          <Persons key={person.name} person={person} />
+          <Persons key={person.name} person={person} delPersonobject={delPersonobject} />
         )}
       </ul>
 

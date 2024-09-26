@@ -1,7 +1,13 @@
-const Persons = ({ person }) => {
-    return (
-      <li>{person.name} {person.number}</li>
-    )
+const Persons = ({ person, delPersonobject }) => {
+  const handleDel = (event) => {
+    event.preventDefault()
+    console.log(person.id)
+    delPersonobject(person.id)
   }
   
-  export default Persons
+  return (
+    <li>{person.name} {person.number} <button type="button" onClick={handleDel}>delete</button> </li>
+  )
+}
+  
+export default Persons
