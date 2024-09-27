@@ -21,7 +21,7 @@ const App = () => {
   const [filteredNames, setFilteredNames] = useState(persons)
 
   //success message state
-  const [successMessage, setSuccessMessage] = useState(null)
+  const [successerrorMessage, setSuccessErrorMessage] = useState(null)
 
   //useEffect hook to fetch data from json server
   useEffect(() => {
@@ -44,13 +44,23 @@ const App = () => {
           .update(person.id, changedPerson)
           .then(response => {
             setPersons(persons.map(p => p.id !== person.id ? p : response.data));
-            //setting success message
-            setSuccessMessage(`Number of ${newName}  updated`);
-            //success message displayed 5s
+            //setting message
+            setSuccessErrorMessage(`Number of ${newName}  updated`);
+            //message displayed 5s
             setTimeout(() => {
-              setSuccessMessage(null);
+              setSuccessErrorMessage(null);
             }, 5000);
           })
+          //catching error if person object is already deleted
+          .catch(error => {
+            setSuccessErrorMessage(`Information of ${newName} has already been removed from server`);
+            //updating persons array by removing deleted person object
+            setPersons(persons.filter(p => p.id !== person.id));
+            //message displayed 5s
+            setTimeout(() => {
+                setSuccessErrorMessage(null);
+            }, 5000);
+          });
       }
       //personService add the person object to the json server
     } else {
@@ -64,11 +74,11 @@ const App = () => {
       .create(personObject)
       .then(response => {
         setPersons(persons.concat(response.data));
-        //setting success message
-        setSuccessMessage(`Added ${newName}`);
-        //success message displayed 5s
+        //setting message
+        setSuccessErrorMessage(`Added ${newName}`);
+        //message displayed 5s
         setTimeout(() => {
-          setSuccessMessage(null);
+          setSuccessErrorMessage(null);
         }, 5000);
       })
     }
@@ -99,7 +109,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Notification message={successMessage} />
+      <Notification message={successerrorMessage} />
       <Searchname persons={persons} setFilteredNames={handleSearchResult} />
 
       <h2>add a new</h2>
