@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import Persons from './components/persons'
 import Addpersons from './components/addpersons'
 import Searchname from './components/searchname'
+import Notification from './components/Notification'
 
 import personService from './services/persons'
 
@@ -16,6 +17,9 @@ const App = () => {
 
   //filtered names set to person array
   const [filteredNames, setFilteredNames] = useState(persons)
+
+  //error message state
+  const [errorMessage, setErrorMessage] = useState(null)
 
   //useEffect hook to fetch data from json server
   useEffect(() => {
@@ -49,10 +53,14 @@ const App = () => {
         id: (persons.length + 1).toString()
       }
       personService
-        .create(personObject)
-        .then(response => {
-          setPersons(persons.concat(response.data));
-        })
+      .create(personObject)
+      .then(response => {
+        setPersons(persons.concat(response.data));
+        setErrorMessage(`Person '${newName}' added to the phonebook`);
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 5000);
+      })
     }
   }
 
@@ -85,6 +93,7 @@ const App = () => {
 
       <h2>add a new</h2>
       <Addpersons createPersonobject={createPersonobject} />
+      <Notification message={errorMessage} />
       
       <h2>Numbers</h2>
       <ul>
