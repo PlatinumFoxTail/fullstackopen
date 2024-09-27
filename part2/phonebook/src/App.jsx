@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 
+import './index.css';
+
 import Persons from './components/persons'
 import Addpersons from './components/addpersons'
 import Searchname from './components/searchname'
@@ -18,8 +20,8 @@ const App = () => {
   //filtered names set to person array
   const [filteredNames, setFilteredNames] = useState(persons)
 
-  //error message state
-  const [errorMessage, setErrorMessage] = useState(null)
+  //success message state
+  const [successMessage, setSuccessMessage] = useState(null)
 
   //useEffect hook to fetch data from json server
   useEffect(() => {
@@ -42,6 +44,12 @@ const App = () => {
           .update(person.id, changedPerson)
           .then(response => {
             setPersons(persons.map(p => p.id !== person.id ? p : response.data));
+            //setting success message
+            setSuccessMessage(`Number of ${newName}  updated`);
+            //success message displayed 5s
+            setTimeout(() => {
+              setSuccessMessage(null);
+            }, 5000);
           })
       }
       //personService add the person object to the json server
@@ -56,9 +64,11 @@ const App = () => {
       .create(personObject)
       .then(response => {
         setPersons(persons.concat(response.data));
-        setErrorMessage(`Person '${newName}' added to the phonebook`);
+        //setting success message
+        setSuccessMessage(`Added ${newName}`);
+        //success message displayed 5s
         setTimeout(() => {
-          setErrorMessage(null);
+          setSuccessMessage(null);
         }, 5000);
       })
     }
@@ -89,11 +99,11 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={successMessage} />
       <Searchname persons={persons} setFilteredNames={handleSearchResult} />
 
       <h2>add a new</h2>
       <Addpersons createPersonobject={createPersonobject} />
-      <Notification message={errorMessage} />
       
       <h2>Numbers</h2>
       <ul>
