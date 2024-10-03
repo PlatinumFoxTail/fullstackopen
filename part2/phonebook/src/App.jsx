@@ -18,19 +18,28 @@ const App = () => {
   ]) 
 
   //filtered names set to person array
+  //const [filteredNames, setFilteredNames] = useState(persons)
   const [filteredNames, setFilteredNames] = useState(persons)
 
   //success message state
   const [successerrorMessage, setSuccessErrorMessage] = useState(null)
 
   //useEffect hook to fetch data from json server
+  //useEffect(() => {
+    //personService
+      //.getAll()
+      //.then(response => {
+        //setPersons(response.data)
+      //})
+  //}, [])
+
+  //fetch data from backend and initialize persons and filterdNames 
   useEffect(() => {
-    personService
-      .getAll()
-      .then(response => {
-        setPersons(response.data)
-      })
-  }, []) 
+    personService.getAll().then((data) => {
+      setPersons(data);
+      setFilteredNames(data);
+    });
+  }, []);
 
   //createPersonobject function to create a new OR update an existing person object
   const createPersonobject = (newName, newNumber) => {
