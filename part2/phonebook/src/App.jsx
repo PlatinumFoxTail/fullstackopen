@@ -52,7 +52,8 @@ const App = () => {
           })
           //catching error if person object is already deleted
           .catch(error => {
-            setSuccessErrorMessage(`Information of ${newName} has already been removed from server`);
+            //error message displayed from backend
+            setSuccessErrorMessage(error.response.data.error);
             //updating persons array by removing deleted person object
             setPersons(persons.filter(p => p.id !== person.id));
             //message displayed 5s
@@ -70,16 +71,23 @@ const App = () => {
         id: (persons.length + 1).toString()
       }
       personService
-      .create(personObject)
-      .then(response => {
-        setPersons(persons.concat(response.data));
-        //setting message
-        setSuccessErrorMessage(`Added ${newName}`);
-        //message displayed 5s
-        setTimeout(() => {
-          setSuccessErrorMessage(null);
-        }, 5000);
-      })
+        .create(personObject)
+        .then(response => {
+          setPersons(persons.concat(response.data));
+          //setting message
+          setSuccessErrorMessage(`Added ${newName}`);
+          //message displayed 5s
+          setTimeout(() => {
+            setSuccessErrorMessage(null);
+          }, 5000);
+        })
+        .catch(error => {
+          //error message displayed from backend
+          setSuccessErrorMessage(error.response.data.error);
+          setTimeout(() => {
+            setSuccessErrorMessage(null);
+          }, 5000);
+        });
     }
   }
 
